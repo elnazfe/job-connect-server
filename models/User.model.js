@@ -13,23 +13,49 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required."],
     },
-    firstName: {
-      type: String,
-      required: [true, "First name is required."],
-      trim: true,
-    },
-    lastName: {
-      type: String,
-      required: [true, "Last name is required."],
-      trim: true,
-    },
     userType: {
       type: String,
       required: true,
       enum: ['Jobseeker', 'Recruiter'],
     },
-  },
-  {
+    profile: {
+      img: String,
+      firstName: {
+        type: String,
+        required: [true, "First name is required."],
+        trim: true,
+      },
+      lastName: {
+        type: String,
+        required: [true, "Last name is required."],
+        trim: true,
+      },
+      address : {
+        street: String,
+        city: String,
+        country, String,
+        },
+      },
+    bookmark:[
+        {
+        type: Schema.Types.ObjectId,
+        ref:'Job'
+        }],
+    appliedJob: [
+      {
+        type: Schema.Types.ObjectId,
+        ref:'Job'
+        }],
+    notes: [
+        {
+        type: Schema.Types.ObjectId,
+        ref: 'Note'
+        }
+      ],
+    status: [{ type: Schema.Types.ObjectId, ref:'Status' }]
+},
+
+{
     // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
