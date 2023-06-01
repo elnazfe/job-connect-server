@@ -19,21 +19,21 @@ const userSchema = new Schema(
       enum: ['Jobseeker', 'Recruiter'],
     },
     profile: {
-      img: String,
+      profileImg: String,
       firstName: {
         type: String,
-        required: [true, "First name is required."],
+        // required: [true, "First name is required."],
         trim: true,
       },
       lastName: {
         type: String,
-        required: [true, "Last name is required."],
+        // required: [true, "Last name is required."],
         trim: true,
       },
       address : {
         street: String,
         city: String,
-        country, String,
+        country: String,
         },
       },
     bookmark:[
