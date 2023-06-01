@@ -12,7 +12,6 @@ router.get("/profile/:id", async(req,res)=>{
         .populate("userType")
         .populate("profileImg")
     
-
     res.status(200).json(userProfile);
 
     } catch(error) {

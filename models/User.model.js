@@ -16,7 +16,7 @@ const userSchema = new Schema(
     userType: {
       type: String,
       required: true,
-      enum: ['Jobseeker', 'Recruiter'],
+      enum: ["JobSeeker", "Recruiter"],
     },
     profile: {
       profileImg: String,
@@ -30,32 +30,34 @@ const userSchema = new Schema(
         // required: [true, "Last name is required."],
         trim: true,
       },
-      address : {
+      address: {
         street: String,
         city: String,
         country: String,
-        },
       },
-    bookmark:[
-        {
+    },
+    bookmark: [
+      {
         type: Schema.Types.ObjectId,
-        ref:'Job'
-        }],
+        ref: "Job",
+      },
+    ],
     appliedJob: [
       {
         type: Schema.Types.ObjectId,
-        ref:'Job'
-        }],
+        ref: "Job",
+      },
+    ],
     notes: [
-        {
+      {
         type: Schema.Types.ObjectId,
-        ref: 'Note'
-        }
-      ],
-    status: [{ type: Schema.Types.ObjectId, ref:'Status' }]
-},
+        ref: "Note",
+      },
+    ],
+    status: [{ type: Schema.Types.ObjectId, ref: "Status" }],
+  },
 
-{
+  {
     // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
