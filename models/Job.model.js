@@ -8,7 +8,7 @@ const jobSchema = new Schema(
     description: String,
     status: String,
     user: [ { type: Schema.Types.ObjectId, ref:'User' } ],
-    notes: String
+    notes: String,
   }
   );
   
