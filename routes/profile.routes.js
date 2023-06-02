@@ -2,15 +2,25 @@ const router = require("express").Router();
 const User = require("../models/User.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware")
 
+router.get("/profile", async(req,res)=>{
+    const {id} = req.params;
+
+    try{
+        const userProfile = await User.find()
+    
+    res.status(200).json(userProfile);
+
+    } catch(error) {
+        console.log(error);
+    }
+
+})
+
 router.get("/profile/:id", async(req,res)=>{
     const {id} = req.params;
 
     try{
         const userProfile = await User.findById(id)
-        .populate("firstName")
-        .populate("lastName")
-        .populate("userType")
-        .populate("profileImg")
     
     res.status(200).json(userProfile);
 
