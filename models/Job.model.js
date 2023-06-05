@@ -11,6 +11,7 @@ const jobSchema = new Schema({
   column: {
     type: String,
     enum: ["Saved", "Applied", "Pending"],
+    default: "Saved",
   },
 });
 

@@ -8,7 +8,7 @@ const Job = require("../models/Job.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 // POST /api/jobs ROUTE that Creates a new job
-router.post("/jobs/addjob", async (req, res) => {
+router.post("/jobs/addjob", isAuthenticated, async (req, res) => {
   const { title, companyName, jobURL, description, status, notes, user } =
     req.body;
 
@@ -33,11 +33,11 @@ router.post("/jobs/addjob", async (req, res) => {
 });
 
 // GET /api/jobs ROUTE that Lists the Jobs
-router.get("/jobs/:userId", async (req, res) => {
+router.get("/jobs", isAuthenticated, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { _id } = req.payload;
 
-    let allJobs = await Job.find({ user: userId });
+    let allJobs = await Job.find({ user: _id });
 
     res.json(allJobs);
   } catch (error) {
@@ -46,7 +46,7 @@ router.get("/jobs/:userId", async (req, res) => {
 });
 
 // GET /api/jobs/:jobId to display specific info of a Job
-router.get("/jobs/:jobId", async (req, res) => {
+router.get("/jobs/:jobId", isAuthenticated, async (req, res) => {
   const { jobId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
@@ -65,10 +65,10 @@ router.get("/jobs/:jobId", async (req, res) => {
 });
 
 // PUT /api/jobs/:jobId to update info of a Job
-
-router.put("/jobs/:jobId", async (req, res) => {
+router.put("/jobs/:jobId", isAuthenticated, async (req, res) => {
   const { jobId } = req.params;
-  const { title, companyName, jobURL, description, status, notes } = req.body;
+  const { title, companyName, jobURL, description, status, notes, column } =
+    req.body;
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
     res.status(400).json({ message: "Specified Id is not valid" });
@@ -78,7 +78,7 @@ router.put("/jobs/:jobId", async (req, res) => {
   try {
     let updatedJob = await Job.findByIdAndUpdate(
       jobId,
-      { title, companyName, jobURL, description, status, notes },
+      { title, companyName, jobURL, description, status, notes, column },
       { new: true }
     );
     res.json(updatedJob);
@@ -88,7 +88,7 @@ router.put("/jobs/:jobId", async (req, res) => {
 });
 
 // PUT /api/jobs/:jobId to delete a Job
-router.delete("/jobs/:jobId", async (req, res) => {
+router.delete("/jobs/:jobId", isAuthenticated, async (req, res) => {
   const { jobId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
