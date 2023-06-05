@@ -33,9 +33,12 @@ router.post("/jobs/addjob", async (req, res) => {
 });
 
 // GET /api/jobs ROUTE that Lists the Jobs
-router.get("/jobs", async (req, res) => {
+router.get("/jobs/:userId", async (req, res) => {
   try {
-    let allJobs = await Job.find();
+    const { userId } = req.params;
+
+    let allJobs = await Job.find({ user: userId });
+
     res.json(allJobs);
   } catch (error) {
     res.json(error);
