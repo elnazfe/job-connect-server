@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
+const Job = require("../models/Job.model");
 
 // Require necessary (isAuthenticated) middleware in order to control access to specific routes
 const { isAuthenticated } = require("../middleware/jwt.middleware.js");
@@ -105,24 +106,30 @@ router.post("/login", (req, res, next) => {
       const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
 
       if (passwordCorrect) {
-        // Deconstruct the user object to omit the password
-        const { _id, email, userType } = foundUser;
+        foundUser.populate("bookmark").then((response) => {
+          console.log(response);
+          // Deconstruct the user object to omit the password
+          const { _id, email, userType, bookmark } = response;
 
-        // Create an object that will be set as the token payload
-        const payload = {
-          _id,
-          email,
-          userType,
-        };
+          console.log(bookmark);
 
-        // Create a JSON Web Token and sign it
-        const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
-          algorithm: "HS256",
-          expiresIn: "6h",
+          // Create an object that will be set as the token payload
+          const payload = {
+            _id,
+            email,
+            userType,
+            bookmark,
+          };
+
+          // Create a JSON Web Token and sign it
+          const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+            algorithm: "HS256",
+            expiresIn: "6h",
+          });
+
+          // Send the token as the response
+          res.status(200).json({ authToken: authToken });
         });
-
-        // Send the token as the response
-        res.status(200).json({ authToken: authToken });
       } else {
         res.status(401).json({ message: "Unable to authenticate the user" });
       }
