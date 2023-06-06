@@ -48,13 +48,9 @@ const userSchema = new Schema(
         ref: "Job",
       },
     ],
-    notes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Note",
-      },
-    ],
-    status: [{ type: Schema.Types.ObjectId, ref: "Status" }],
+    notes: {
+      type: String,
+    }
   },
 
   {

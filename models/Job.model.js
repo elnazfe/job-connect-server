@@ -5,7 +5,6 @@ const jobSchema = new Schema({
   companyName: String,
   jobURL: String,
   description: String,
-  status: String,
   user: { type: Schema.Types.ObjectId, ref: "User" },
   notes: String,
   column: {

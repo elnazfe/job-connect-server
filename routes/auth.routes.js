@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
 const Job = require("../models/Job.model");
+const Recruiter = require("../models/Recruiter.model")
 
 // Require necessary (isAuthenticated) middleware in order to control access to specific routes
 const { isAuthenticated } = require("../middleware/jwt.middleware.js");
