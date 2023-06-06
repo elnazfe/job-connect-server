@@ -36,18 +36,6 @@ const userSchema = new Schema(
       city: String,
       country: String,
     },
-    bookmark: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Job",
-      },
-    ],
-    appliedJob: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Job",
-      },
-    ],
     notes: {
       type: String,
     }
