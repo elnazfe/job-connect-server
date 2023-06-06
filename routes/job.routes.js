@@ -23,9 +23,10 @@ router.post("/jobs/addjob", isAuthenticated, async (req, res) => {
       user: user._id,
     });
 
-    await User.findByIdAndUpdate(user._id, {
+    /* await User.findByIdAndUpdate(user._id, {
       $push: { bookmark: response._id },
-    });
+    }); */
+
     res.json(response);
   } catch (error) {
     res.json(error);

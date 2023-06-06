@@ -4,11 +4,11 @@ const mongoose = require("mongoose");
 const User = require("../models/User.model");
 const Recruiter = require("../models/Recruiter.model");
 
-// const { isAuthenticated } = require("../middleware/jwt.middleware");
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 // POST /api/ ROUTE that Creates a new employee
-router.post("/recruiter/add", async (req, res) => {
-  const { employeeName, jobPosition, description, notes} =
+router.post("/recruiter/add", isAuthenticated, async (req, res) => {
+  const { employeeName, jobPosition, description, notes, user} =
     req.body;
 
   try {
@@ -17,6 +17,7 @@ router.post("/recruiter/add", async (req, res) => {
       employeeName,
       description,
       notes,
+      user: user._id,
     });
 
    /*  await User.findByIdAndUpdate(user._id, {
@@ -29,11 +30,11 @@ router.post("/recruiter/add", async (req, res) => {
 });
 
 // GET /api/ ROUTE that Lists the Employees
-router.get("/recruiter", async (req, res) => {
+router.get("/recruiter", isAuthenticated, async (req, res) => {
   try {
-    /* const { _id } = req.payload; */
+    const { _id } = req.payload; 
 
-    let allEmployees = await Recruiter.find();
+    let allEmployees = await Recruiter.find({ user: _id });
     res.json(allEmployees);
 
   } catch (error) {
@@ -42,7 +43,7 @@ router.get("/recruiter", async (req, res) => {
 });
 
 // GET to display specific info of an employee
-router.get("/recruiter/:employeeId", async (req, res) => {
+router.get("/recruiter/:employeeId", isAuthenticated, async (req, res) => {
   const { employeeId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(employeeId)) {
@@ -61,7 +62,7 @@ router.get("/recruiter/:employeeId", async (req, res) => {
 });
 
 // PUT /api/ to update info of an Employee
-router.put("/recruiter/:employeeId", async (req, res) => {
+router.put("/recruiter/:employeeId", isAuthenticated, async (req, res) => {
   const { employeeId } = req.params;
   const { title, employeeName, jobPosition, description, notes, column } =
     req.body;
@@ -84,7 +85,7 @@ router.put("/recruiter/:employeeId", async (req, res) => {
 });
 
 // Delete to delete an Employee
-router.delete("/recruiter/:employeeId", async (req, res) => {
+router.delete("/recruiter/:employeeId", isAuthenticated, async (req, res) => {
   const { employeeId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(employeeId)) {
