@@ -4,51 +4,48 @@ const mongoose = require("mongoose");
 const User = require("../models/User.model");
 const Recruiter = require("../models/Recruiter.model");
 
-const { isAuthenticated } = require("../middleware/jwt.middleware");
+// const { isAuthenticated } = require("../middleware/jwt.middleware");
 
-// POST /api/jobs ROUTE that Creates a new job
-router.post("/recruiter/addresume", isAuthenticated, async (req, res) => {
-  const { title, employerName, jobPosition, description, notes, user, column } =
+// POST /api/ ROUTE that Creates a new employee
+router.post("/recruiter/add", async (req, res) => {
+  const { employeeName, jobPosition, description, notes} =
     req.body;
 
   try {
-    let response = await Job.create({
-      title,
-      employerName,
+    let response = await Recruiter.create({
       jobPosition,
+      employeeName,
       description,
       notes,
-      user: user._id,
-      column,
     });
 
-    await User.findByIdAndUpdate(user._id, {
-      $push: { recieved: response._id },
-    });
+   /*  await User.findByIdAndUpdate(user._id, {
+      $push: { column: response._id },
+    }); */
     res.json(response);
   } catch (error) {
     res.json(error);
   }
 });
 
-// GET /api/jobs ROUTE that Lists the Jobs
-router.get("/employer", isAuthenticated, async (req, res) => {
+// GET /api/ ROUTE that Lists the Employees
+router.get("/recruiter", async (req, res) => {
   try {
-    const { _id } = req.payload;
+    /* const { _id } = req.payload; */
 
-    let allEmployers = await Recruiter.find({ user: _id });
+    let allEmployees = await Recruiter.find();
+    res.json(allEmployees);
 
-    res.json(allEmployers);
   } catch (error) {
     res.json(error);
   }
 });
 
-// GET /api/jobs/:jobId to display specific info of a Job
-router.get("/employer/:employerId", isAuthenticated, async (req, res) => {
-  const { employerId } = req.params;
+// GET to display specific info of an employee
+router.get("/recruiter/:employeeId", async (req, res) => {
+  const { employeeId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(employerId)) {
+  if (!mongoose.Types.ObjectId.isValid(employeeId)) {
     // status of 2xx is successful.
     // error with 4xx is client-side.
     // error with 5xx is server-side
@@ -56,48 +53,48 @@ router.get("/employer/:employerId", isAuthenticated, async (req, res) => {
     return;
   }
   try {
-    let foundEmployer = await Recruiter.findById(employerId);
-    res.status(200).json(foundEmployer);
+    let foundEmployee = await Recruiter.findById(employeeId);
+    res.status(200).json(foundEmployee);
   } catch (error) {
     res.json(error);
   }
 });
 
-// PUT /api/jobs/:jobId to update info of a Job
-router.put("/employer/:employerId", isAuthenticated, async (req, res) => {
-  const { employerId } = req.params;
-  const { title, employerName, jobPosition, description, notes, column } =
+// PUT /api/ to update info of an Employee
+router.put("/recruiter/:employeeId", async (req, res) => {
+  const { employeeId } = req.params;
+  const { title, employeeName, jobPosition, description, notes, column } =
     req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(employerId)) {
+  if (!mongoose.Types.ObjectId.isValid(employeeId)) {
     res.status(400).json({ message: "Specified Id is not valid" });
     return;
   }
 
   try {
-    let updatedEmployer = await Recruiter.findByIdAndUpdate(
-        employerId,
-      { title, employerName, jobPosition, description, notes, column },
+    let updatedEmployee = await Recruiter.findByIdAndUpdate(
+        employeeId,
+      { title, employeeName, jobPosition, description, notes, column },
       { new: true }
     );
-    res.json(updatedEmployer);
+    res.json(updatedEmployee);
   } catch (error) {
     res.json(error);
   }
 });
 
-// PUT /api/jobs/:jobId to delete a Job
-router.delete("/employer/:employerId", isAuthenticated, async (req, res) => {
-  const { employerId } = req.params;
+// Delete to delete an Employee
+router.delete("/recruiter/:employeeId", async (req, res) => {
+  const { employeeId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(employerId)) {
+  if (!mongoose.Types.ObjectId.isValid(employeeId)) {
     res.status(400).json({ message: "Specified Id is not valid" });
     return;
   }
 
   try {
-    await Recruiter.findByIdAndRemove(employerId);
-    res.json({ message: `Recruiter with ${employerId} is removed.` });
+    await Recruiter.findByIdAndRemove(employeeId);
+    res.json({ message: `Recruiter with ${employeeId} is removed.` });
   } catch (error) {
     res.json(error);
   }
