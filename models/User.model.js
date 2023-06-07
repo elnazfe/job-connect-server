@@ -20,6 +20,7 @@ const userSchema = new Schema(
     },
     profileImg: {
        type: String,
+       default: `https://res.cloudinary.com/de5qo3dxk/image/upload/v1686080368/Job-Connect/avatar-icon_s0ufw1.jpg`
     },
     firstName: {
       type: String,
