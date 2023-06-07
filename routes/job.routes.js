@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 
 const User = require("../models/User.model");
 const Job = require("../models/Job.model");
-/* const Dashborad = require("../models/Dashboard.model") */
 
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 
@@ -39,8 +38,8 @@ router.get("/jobs", isAuthenticated, async (req, res) => {
     const { _id } = req.payload;
 
     let allJobs = await Job.find({ user: _id });
-
     res.json(allJobs);
+
   } catch (error) {
     res.json(error);
   }
