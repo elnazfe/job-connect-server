@@ -8,8 +8,8 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 // POST /api/ ROUTE that Creates a new employee
 router.post("/recruiter/add", isAuthenticated, async (req, res) => {
-  const { employeeName, jobPosition, description, notes, user} =
-    req.body;
+  console.log({ req: req.body });
+  const { employeeName, jobPosition, description, notes, user } = req.body;
 
   try {
     let response = await Recruiter.create({
@@ -20,7 +20,7 @@ router.post("/recruiter/add", isAuthenticated, async (req, res) => {
       user: user._id,
     });
 
-   /*  await User.findByIdAndUpdate(user._id, {
+    /*  await User.findByIdAndUpdate(user._id, {
       $push: { column: response._id },
     }); */
     res.json(response);
@@ -32,11 +32,10 @@ router.post("/recruiter/add", isAuthenticated, async (req, res) => {
 // GET /api/ ROUTE that Lists the Employees
 router.get("/recruiter", isAuthenticated, async (req, res) => {
   try {
-    const { _id } = req.payload; 
+    const { _id } = req.payload;
 
     let allEmployees = await Recruiter.find({ user: _id });
     res.json(allEmployees);
-
   } catch (error) {
     res.json(error);
   }
@@ -74,7 +73,7 @@ router.put("/recruiter/:employeeId", isAuthenticated, async (req, res) => {
 
   try {
     let updatedEmployee = await Recruiter.findByIdAndUpdate(
-        employeeId,
+      employeeId,
       { title, employeeName, jobPosition, description, notes, column },
       { new: true }
     );
@@ -102,4 +101,3 @@ router.delete("/recruiter/:employeeId", isAuthenticated, async (req, res) => {
 });
 
 module.exports = router;
-

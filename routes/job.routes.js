@@ -3,12 +3,13 @@ const mongoose = require("mongoose");
 
 const User = require("../models/User.model");
 const Job = require("../models/Job.model");
+const Application = require("../models/Application.model");
 
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 // POST /api/jobs ROUTE that Creates a new job
 router.post("/jobs/addjob", isAuthenticated, async (req, res) => {
-  const { title, companyName, jobURL, description, status, notes, user } =
+  const { title, companyName, jobURL, description, status, notes, user, type } =
     req.body;
 
   try {
@@ -20,6 +21,7 @@ router.post("/jobs/addjob", isAuthenticated, async (req, res) => {
       status,
       notes,
       user: user._id,
+      type,
     });
 
     /* await User.findByIdAndUpdate(user._id, {
@@ -39,7 +41,32 @@ router.get("/jobs", isAuthenticated, async (req, res) => {
 
     let allJobs = await Job.find({ user: _id });
     res.json(allJobs);
+  } catch (error) {
+    res.json(error);
+  }
+});
 
+// GET /api/jobs/available ROUTE that Lists the available Jobs
+router.get("/jobs/available", isAuthenticated, async (req, res) => {
+  try {
+    const { _id } = req.payload;
+
+    let applications = await Application.find({ user: _id });
+
+    let allJobs = await Job.find({
+      status: "open",
+    });
+
+    const applicationsIds = applications.map((a) => a.job._id.toString());
+
+    const response = allJobs.map((job) => {
+      return {
+        ...job._doc,
+        applied: applicationsIds.includes(job._id.toString()),
+      };
+    });
+
+    res.json(response);
   } catch (error) {
     res.json(error);
   }

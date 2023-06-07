@@ -7,10 +7,20 @@ const jobSchema = new Schema({
   description: String,
   user: { type: Schema.Types.ObjectId, ref: "User" },
   notes: String,
+  status: {
+    type: String,
+    enum: ["open", "closed", "user"],
+    default: "open",
+  },
   column: {
     type: String,
     enum: ["Saved", "Applied", "Pending"],
     default: "Saved",
+  },
+  type: {
+    type: String,
+    enum: ["recruiter", "user"],
+    default: "user",
   },
 });
 

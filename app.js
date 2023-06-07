@@ -30,6 +30,9 @@ app.use("/api", profileRoutes);
 const recruiterRoutes = require("./routes/recruiter.routes");
 app.use("/api", recruiterRoutes);
 
+const applicationRoutes = require("./routes/application.routes");
+app.use("/api", applicationRoutes);
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 
